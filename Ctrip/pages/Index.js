@@ -182,7 +182,6 @@ var Index = React.createClass({
 var styles = StyleSheet.create({
     //container
     container: {
-        backgroundColor: '#F2F2F2',
         flex: 1
     },
     //slider
