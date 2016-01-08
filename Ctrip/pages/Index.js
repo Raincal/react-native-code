@@ -10,6 +10,7 @@ var {
     Image,
     TouchableHighlight,
     ScrollView,
+    PixelRatio,
     } = React;
 
 var sliderImgs = [
@@ -166,7 +167,7 @@ var Index = React.createClass({
                 </View>
 
                 <View style={[styles.img_view]}>
-                    <View style={[styles.img_flex, {borderRightWidth:0.5}]}>
+                    <View style={[styles.img_flex]}>
                         <Image style={[styles.img_wh]} source={{uri:Images[0]}}></Image>
                     </View>
                     <View style={[styles.img_flex, {borderLeftWidth:0}]}>
@@ -197,7 +198,7 @@ var styles = StyleSheet.create({
         height: 89,
         marginLeft: 5,
         marginRight: 5,
-        borderWidth: 1,
+        borderWidth: 1/PixelRatio.get(),
         borderRadius: 5,
         marginBottom: 5,
         flexDirection: 'row'
@@ -226,7 +227,7 @@ var styles = StyleSheet.create({
     },
     sbu_borderRight: {
         borderColor: '#fff',
-        borderRightWidth: 1
+        borderRightWidth: 1/PixelRatio.get()
     },
     sbu_icon_img: {
         width: 40,
@@ -247,7 +248,7 @@ var styles = StyleSheet.create({
         fontWeight: '800'
     },
     sbu_borderBottom: {
-        borderBottomWidth: 1,
+        borderBottomWidth: 1/PixelRatio.get(),
         borderBottomColor: '#fff'
     },
     img_view: {
@@ -260,7 +261,7 @@ var styles = StyleSheet.create({
     },
     img_flex: {
         flex: 1,
-        borderWidth: 1,
+        borderWidth: 1/PixelRatio.get(),
         borderColor: '#ccc'
     },
     img_wh: {
