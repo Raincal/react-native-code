@@ -14,7 +14,7 @@ var {
     ScrollView,
     AsyncStorage,
     TouchableOpacity,
-    } = React;
+} = React;
 
 var Model = [
     {
@@ -83,9 +83,27 @@ var Item = React.createClass({
 var List = React.createClass({
     getInitialState: function () {
         return {
-            count: 0
+            count: 0,
+            str: null
         }
     },
+    componentDidMount: function () {
+        var _that = this;
+        AsyncStorage.getAllKeys(function (err, keys) {
+            if (err) {
+                //TODO
+            }
+            var _count = keys.length;
+            if (_count) {
+                var _str = ', 共' + _count + '件商品';
+                _that.setState({
+                    count: _count,
+                    str: _str
+                });
+            }
+        })
+    },
+
     render: function () {
         var list = [];
         for (var i in Model) {
@@ -107,42 +125,39 @@ var List = React.createClass({
                 list.push(row);
             }
         }
-
-        var count = this.state.count;
-        var str = null;
-        if (count) {
-            str = ', 共' + count + '件商品';
-        }
         return (
             <ScrollView style={{marginTop: 0}}>
                 {list}
-                <Text onPress={this.goGouWu} style={styles.btn} ref="jiesuan">去结算{str}</Text>
+                <Text onPress={this.goGouWu} style={styles.btn} ref="jiesuan">去结算{this.state.str}</Text>
             </ScrollView>
         );
     },
-    componentDidMount: function () {
-        var _that = this;
-        AsyncStorage.getAllKeys(function (err, keys) {
-            if (err) {
-                //TODO
-            }
-            _that.setState({
-                count: keys.length
-            })
-        })
-    },
     goGouWu: function () {
+        var _that = this;
         this.props.navigator.push({
             component: GouWu,
-            title: '购物车'
+            title: '购物车',
+            passProps: {
+                clear: function () {
+                    _that.setState({
+                        count: 0,
+                        str: null
+                    })
+                }
+            }
         })
     },
     press: function (data) {
         var count = this.state.count;
         count++;
-        this.setState({
-            count: count
-        });
+        if (count) {
+            var _str = ', 共' + count + '件商品';
+            this.setState({
+                count: count,
+                str: _str
+            });
+        }
+
 
         AsyncStorage.setItem('SP-' + this.genId() + '-SP', JSON.stringify(data), function (err) {
             if (err) {
@@ -218,6 +233,7 @@ var GouWu = React.createClass({
                     data: [],
                     price: 0
                 });
+                _that.props.clear();
                 alert('购物车已经清空');
             }
             //TODO: ERR
